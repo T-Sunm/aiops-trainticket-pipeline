@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Raw Train Ticket dataset (download separately; do not commit)
+data/raw/
