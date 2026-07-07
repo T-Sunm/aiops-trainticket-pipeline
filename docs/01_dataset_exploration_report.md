@@ -56,6 +56,68 @@ Structured logs should be used instead of parsing the raw text again. Metrics an
 
 One metric file normally corresponds to one Prometheus metric name, but it can contain thousands of time series. A time series is uniquely identified by its complete label set, such as metric name, pod, container, instance, CPU, or network interface.
 
+The scenario and metric file names describe the **experiment context**, not the owner of every series inside the file. For example:
+
+```text
+Scenario folder:
+ts-auth-mongo_4.4.15_2022-07-13
+
+Metric file:
+ts-auth-service_3_Mongo_4.4.15.json_container_cpu_usage_seconds_total.json
+```
+
+The file above stores the result of a cluster-wide Prometheus query for `container_cpu_usage_seconds_total` during the selected experiment. The actual owner of each time series must be determined from the labels inside `data.result[].metric`.
+
+A simplified version of the JSON structure is shown below. Most labels and samples are omitted to keep the example readable:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "resultType": "matrix",
+    "result": [
+      {
+        "metric": {
+          "__name__": "container_cpu_usage_seconds_total",
+          "service": "kubelet",
+          "pod": "ts-auth-service-96d95d474-bdfpt",
+          "container": "ts-auth-service",
+          "image": "docker.io/codewisdom/ts-auth-service-with-jaeger:v1",
+          "instance": "10.252.1.21:10250",
+          "cpu": "total"
+        },
+        "values": [
+          [1657711577.09, "5.737832534"],
+          [1657711607.016, "12.950618888"]
+        ]
+      },
+      {
+        "metric": {
+          "__name__": "container_cpu_usage_seconds_total",
+          "service": "kubelet",
+          "pod": "ts-auth-mongo-6765bf594-fsf44",
+          "container": "ts-auth-mongo",
+          "image": "docker.io/library/mongo:4.4.15",
+          "instance": "10.252.1.23:10250",
+          "cpu": "total"
+        },
+        "values": [
+          [1657711596.984, "2.003522884"],
+          [1657711626.984, "2.165104171"]
+        ]
+      }
+    ]
+  }
+}
+```
+
+The two entries belong to different containers even though they are stored in the same scenario metric file:
+
+- `pod=ts-auth-service-*`, `container=ts-auth-service`: the authentication application.
+- `pod=ts-auth-mongo-*`, `container=ts-auth-mongo`: its MongoDB dependency.
+
+The same file also contains series for unrelated workloads and Kubernetes infrastructure. Therefore, filtering must use the internal labels rather than the scenario prefix or file name.
+
 In this report:
 
 - `series_count` is the number of distinct labeled time series.
