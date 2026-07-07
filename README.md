@@ -12,3 +12,4 @@ Expand-Archive -Path "dataset.zip" -DestinationPath "data/raw"
 ## Documentation
 
 - [Dataset exploration report](docs/01_dataset_exploration_report.md)
+- [Canonical metric series selection](docs/02_metrics_detection_report.md)

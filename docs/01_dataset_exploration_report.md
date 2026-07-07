@@ -148,6 +148,14 @@ Three target-service metric families were found:
 - Container CPU usage
 - Container network transmit packets
 
+> **Interpretation note — avoid reading the exploratory total as application usage.**
+>
+> The notebook currently selects every series whose `pod` or `container` label contains `ts-auth`. This broad match includes both the `ts-auth-service` application and its `ts-auth-mongo` database. It can also select several cAdvisor views of the same workload: the application container, the pod-level cgroup, and the `POD` sandbox container.
+>
+> Pod-level values already include container resource usage. Adding a container value to its pod-level value therefore counts some of the same resource more than once. For example, an application container using `100 MiB`, a pod total of approximately `105 MiB`, and a `POD` sandbox using `5 MiB` must not be interpreted as `210 MiB` of independent usage; the real pod total is approximately `105 MiB`.
+>
+> Consequently, the dark `ts-auth total` lines in Figure 1 are useful for locating periods of change, but they are **not** the resource usage of `ts-auth-service` alone. The memory value near `900 MiB`, for example, mixes application, MongoDB, and overlapping cgroup series. A detector must apply metric-specific selection rules and keep application and database entities separate before aggregation. CPU and memory should use one canonical container or cgroup level; pod network metrics may legitimately appear under `container="POD"` because containers in a pod share its network namespace.
+
 ### 3.4 Counter and gauge handling
 
 CPU and network metrics ending in `_total` are cumulative counters. They should be converted to rates before analysis:
