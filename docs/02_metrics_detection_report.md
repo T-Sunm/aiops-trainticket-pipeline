@@ -239,3 +239,5 @@ The preparation stages establish the following evidence for subsequent anomaly d
 6. Pod and series counts must remain part of the evidence used to interpret any alert raised during that transition.
 
 The next notebook stage applies a leakage-aware rolling median and median absolute deviation detector. Detector thresholds, anomaly labels, and alert evaluation are intentionally not reported here because they occur after section 7.
+
+The normalized JSON contract used to export metric candidates and later align them with log or trace candidates is specified in [Telemetry Incident Candidate Contract](telemetry_incident_candidate_schema.md).
