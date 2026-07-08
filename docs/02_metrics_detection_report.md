@@ -238,6 +238,260 @@ The preparation stages establish the following evidence for subsequent anomaly d
 5. A clear multi-metric transition appears around 11:25–11:31 UTC, led by application CPU and accompanied by application composition changes and MongoDB memory/network changes.
 6. Pod and series counts must remain part of the evidence used to interpret any alert raised during that transition.
 
-The next notebook stage applies a leakage-aware rolling median and median absolute deviation detector. Detector thresholds, anomaly labels, and alert evaluation are intentionally not reported here because they occur after section 7.
+The next stage applies a leakage-aware rolling median and median absolute deviation detector to these streams, then consolidates its point-level output through a correlation flow.
 
-The normalized JSON contract used to export metric candidates and later align them with log or trace candidates is specified in [Telemetry Incident Candidate Contract](telemetry_incident_candidate_schema.md).
+## 8. Point anomaly detection
+
+Each `entity × metric_name × feature_name` stream is scored independently with a rolling median and median absolute deviation (MAD) detector. Separating the streams prevents CPU, memory, network, application, MongoDB, sum, mean, and maximum observations from sharing a baseline.
+
+### 8.1 Detector configuration
+
+| Parameter | Value | Time interpretation at 30-second resolution |
+|---|---:|---|
+| `ROLLING_WINDOW` | 20 points | Up to 10 minutes of history |
+| `MIN_HISTORY` | 10 points | Five minutes before a baseline is available |
+| `SCORE_THRESHOLD` | 4.0 | Candidate when absolute normalized deviation reaches four scales |
+| `PERSISTENCE_WINDOW` | 3 points | Inspect the current 90-second rolling state |
+| `MIN_ANOMALOUS_POINTS` | 1 point | One candidate is sufficient to activate that state |
+
+The expected value uses only prior observations:
+
+```text
+history(t)  = observed values strictly before t
+expected(t) = rolling median(history(t))
+```
+
+The call to `shift(1)` is the leakage-control boundary: the current value cannot influence its own expected value.
+
+### 8.2 Robust scale and score
+
+The primary dispersion estimate is:
+
+```text
+robust_scale = 1.4826 × rolling MAD
+```
+
+The implementation protects nearly constant streams from a zero denominator by selecting the maximum of:
+
+```text
+robust MAD scale
+rolling standard deviation
+0.5% of the expected value
+1e-9 absolute floor
+```
+
+The normalized score and expected band are:
+
+```text
+anomaly_score = (observed_value - expected_value) / scale
+lower_bound   = expected_value - 4 × scale
+upper_bound   = expected_value + 4 × scale
+```
+
+A score outside this band creates an `is_candidate` point. `is_anomaly` represents the three-point rolling state: with the current minimum of one, a single candidate can keep the state active for up to the current and following two positions. `direction` records whether the current observation lies above (`high`) or below (`low`) the baseline.
+
+### 8.3 Interpretation limits
+
+The output is detector evidence, not an incident count. Several details matter:
+
+- `value_sum`, `value_mean`, and `value_max` are mathematically related and therefore are not independent votes.
+- When one series contributes, `sum = mean = max`; the three detector streams are duplicate views of one signal.
+- CPU baselines close to zero can produce large normalized scores from small absolute movements.
+- CPU and network are visibly noisier than memory in this scenario.
+- Once a spike enters rolling history, the standard-deviation fallback can widen the expected band substantially.
+
+These limitations are why the downstream flow consolidates point fires and retains cautious names such as `possible_*` for rule-based interpretations.
+
+## 9. Correlation flow
+
+The correlation implementation is one processing flow with four successive grouping steps:
+
+```text
+detector anomaly points
+→ feature episodes
+→ entity-metric events
+→ component incidents
+→ scenario incident candidates
+```
+
+The common `CORRELATION_GAP` is 90 seconds. This is a **session gap**, not a fixed clock window. Two intervals join when they overlap or the next interval begins no more than 90 seconds after the current cluster ends. The clustering is transitive: if A is near B and B is near C, all three can belong to one cluster even when A and C are farther apart than 90 seconds.
+
+### 9.1 Step 1: anomaly points to feature episodes
+
+Point fires are first partitioned by:
+
+```text
+entity × metric_name × feature_name × direction
+```
+
+Consecutive fires separated by no more than 90 seconds become one feature episode. Keeping `direction` in the key prevents a high episode and a low episode of the same feature from being represented as one directional episode.
+
+Each episode records:
+
+- first and last fire time;
+- duration and point count;
+- largest absolute detector score and its observed value;
+- minimum and maximum pod/series contributor counts;
+- whether the number of metric contributors changed during the episode.
+
+The current run produces **39 feature episodes**. Their sequential notebook IDs support in-memory debugging only and are deliberately excluded from the public JSON contract.
+
+### 9.2 Step 2: feature episodes to entity-metric events
+
+Episodes are then clustered by:
+
+```text
+entity × metric_name
+```
+
+Direction is no longer a grouping key. This is intentional because opposing feature directions can carry the important interpretation. For example:
+
+```text
+memory value_sum:high
+memory value_mean:low
+→ possible_composition_change
+```
+
+The rule function interprets combinations of `value_sum`, `value_mean`, and `value_max`:
+
+| Pattern | Evidence shape | Cautious interpretation |
+|---|---|---|
+| `single_contributor_duplicate_views` | One contributing series and multiple aggregate views | Sum, mean, and max are duplicate representations |
+| `possible_composition_change` | Sum high, mean low | Total rises while the average contributor falls |
+| `broad_load_increase` | Sum, mean, and max high | Entity-wide and per-series load rise together |
+| `distributed_load_increase` | Sum and mean high | Load increases beyond a pure contributor-count effect |
+| `possible_scale_or_rollout` | Sum high, mean not fired, contributor count changed | More contributors may explain the larger total |
+| `possible_isolated_series_spike` | Max high, mean not fired | Change may be concentrated in one contributor |
+| `possible_lifecycle_or_telemetry_drop` | Sum low and contributor count changed | Lifecycle or telemetry availability may explain the drop |
+| `broad_load_decrease` | Sum, mean, and max low | Broad decrease across aggregate views |
+| `mixed_multi_feature_change` | Several unmatched feature signals | Multi-feature change without a more specific rule |
+| `single_feature_change` | One fired feature | Limited single-view evidence |
+
+“Mean not fired” means that the detector did not label mean as high or low in that event; it does not prove that mean was perfectly unchanged. Pattern names are therefore hypotheses, not root-cause labels.
+
+The current run reduces 39 feature episodes to **9 entity-metric events**. The main transition includes:
+
+- application CPU: `broad_load_increase`;
+- application memory: `possible_composition_change`;
+- MongoDB memory: `possible_lifecycle_or_telemetry_drop`;
+- several single-contributor CPU/network events where sum, mean, and max must not be counted as independent evidence.
+
+### 9.3 Step 3: metric events to component incidents
+
+Metric events are clustered by `entity`, so temporally related CPU, memory, and network events become one component incident for either `application` or `mongo`.
+
+The current implementation classifies only by metric coverage:
+
+```text
+1 affected metric  → single_metric_event
+2 affected metrics → correlated_resource_event
+3 affected metrics → multi_metric_resource_transition
+```
+
+This step currently expresses temporal co-occurrence. It does not yet implement a cross-metric symptom rule such as “CPU high + network high + latency high,” nor does it infer causality or resource dependency. The current run produces **6 component incidents**.
+
+### 9.4 Step 4: component incidents to scenario candidates
+
+The final grouping step clusters component incidents across entities. In this scenario, those entities are mapped later to:
+
+```text
+application → train-ticket/ts-auth-service
+mongo       → train-ticket/ts-auth-mongo
+```
+
+The result receives one of two scopes:
+
+- `entity_local`: only one entity contributes;
+- `cross_entity`: both application and MongoDB contribute.
+
+This step is also temporal grouping. It does not currently require a dependency graph or an ordered sequence such as application fire followed by MongoDB fire. That is acceptable for the current two-entity proof of concept, but a larger microservice environment would require dependency constraints, sequence/lag rules, or both to reduce accidental co-occurrence.
+
+## 10. Correlation outcomes
+
+The full flow reduces the detector output as follows:
+
+```text
+39 feature episodes
+→ 9 entity-metric events
+→ 6 component incidents
+→ 3 scenario incident candidates
+```
+
+| Candidate | Interval (UTC) | Scope | Entities | Metric coverage | Point evidence | Maximum source-local score | Contributor count changed |
+|---|---|---|---|---:|---:|---:|---|
+| `scenario_incident_0001` | 10:59:30–11:01:00 | `entity_local` | application | 2 | 18 | 10.075789 | No |
+| `scenario_incident_0002` | 11:25:00–11:33:00 | `cross_entity` | application, mongo | 3 | 61 | 578.222786 | Yes |
+| `scenario_incident_0003` | 11:45:30–11:46:30 | `entity_local` | application | 1 | 9 | 4.140594 | No |
+
+`Point evidence` is the sum of detector-state rows represented by the candidate. It is not the number of independent incidents, and it can contain related sum/mean/max views.
+
+### 10.1 Main cross-entity candidate
+
+`scenario_incident_0002` is the main candidate for this scenario because it:
+
+- overlaps the known 11:25–11:31 deployment transition;
+- covers application and MongoDB;
+- includes CPU, memory, and network evidence;
+- consolidates four component incidents into one scenario candidate;
+- contains a change in the number of observed metric contributors.
+
+Its internal evidence supports a cautious narrative:
+
+1. MongoDB memory falls and its contributor membership changes around 11:25–11:27.
+2. Application memory total rises while its mean falls around 11:25:30–11:28, consistent with a composition change.
+3. Application CPU sum, mean, and max rise around 11:26:30–11:27:30, indicating a real per-series load increase rather than only an additional contributor.
+4. MongoDB CPU/network events follow around 11:29–11:32:30.
+5. Application memory produces a later low maximum event around 11:31:30–11:33.
+
+This ordering is descriptive evidence retained by timestamps; the current flow does not yet apply it as a hard sequence rule.
+
+### 10.2 Local candidates
+
+The two local candidates are weaker:
+
+- `scenario_incident_0001` combines short application CPU/network changes near 11:00. Both metrics have one contributor, so aggregate feature fires are duplicate views and may reflect noisy point detection.
+- `scenario_incident_0003` is an application network-only event near 11:46 with a score only slightly above the configured threshold and no contributor-count change.
+
+They remain in the output rather than being silently discarded. Later log/trace correlation or evaluation can strengthen, downgrade, or reject them.
+
+## 11. Export for cross-signal correlation
+
+The notebook exports all three candidates to:
+
+```text
+data/outputs/metric_incident_candidates.json
+```
+
+Export does not detect or correlate again. It converts the final DataFrame into a stable external representation by:
+
+- replacing sequential scenario IDs with deterministic `mic_` identifiers;
+- serializing intervals as RFC 3339 UTC;
+- mapping internal entities to canonical service identities;
+- embedding metric patterns and feature directions as semantic evidence;
+- adding scenario, time-tolerance, schema-version, and provenance metadata;
+- omitting internal feature-episode, metric-event, and entity-incident IDs.
+
+The current mapping is one-to-one:
+
+```text
+3 scenario candidates in the correlation flow
+→ 3 metric candidates in the JSON artifact
+```
+
+The JSON candidate is the representative of already-correlated metric evidence that will later be aligned with equivalent log or trace candidates. Cross-source matching should use scenario identity, overlapping or nearby UTC intervals, and intersecting canonical service keys. Raw detector scores remain source-local and must not be compared directly with log detector scores.
+
+The normalized contract is specified in [Telemetry Incident Candidate Contract](telemetry_incident_candidate_schema.md).
+
+## 12. Current limitations and next evaluation step
+
+The flow is intentionally a first proof of concept:
+
+- one 90-second session gap is reused at every grouping step;
+- no fixed-window alternative has been evaluated;
+- no service topology or dependency graph is enforced;
+- component and scenario ordering is recorded but not used as a hard rule;
+- cross-metric symptom rules have not yet been introduced;
+- detector and pattern behavior has been inspected on one scenario only;
+- point noise can cause high/low fires to coexist in a short event.
+
+The next step is empirical evaluation rather than adding every possible rule upfront: run the flow on additional scenarios, record false splits, false merges, noisy patterns, and missed incidents, then introduce window, topology, or sequence constraints only where observed failure cases justify them.
