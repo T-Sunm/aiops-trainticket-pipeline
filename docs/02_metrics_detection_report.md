@@ -1,470 +1,241 @@
-# Canonical Metric Series Selection
+# Metrics Detection Report: Signal Preparation and Observed Behavior
 
-## Purpose
+## Purpose and scope
 
-This document explains how canonical Prometheus time series are selected for the scenario `ts-auth-mongo_4.4.15_2022-07-13`. It covers only the selection stage implemented in [`notebooks/02_metrics_detection.ipynb`](../notebooks/02_metrics_detection.ipynb).
+This report records the metric-processing results observed in [`notebooks/02_metrics_detection.ipynb`](../notebooks/02_metrics_detection.ipynb) for scenario `ts-auth-mongo_4.4.15_2022-07-13`. It covers notebook stages 1–7: scenario setup, canonical-series loading, signal transformation, resampling, entity-level aggregation, timeline inspection, and detection-feature preparation.
 
-The objective is to transform an ambiguous set of cluster-wide metric series into a well-defined collection representing two runtime entities:
+Canonical selection is summarized here only where it affects the analysis. Its motivation, label semantics, and selection policy are documented separately in [Canonical Metric Series Selection](02_canonical_metric_series.md). Validation assertions are intentionally outside the scope of this report.
 
-- The `ts-auth-service` application
-- Its `ts-auth-mongo` database dependency
+At this stage the notebook has not yet applied an anomaly detector. Terms such as *spike*, *drop*, and *transition* describe visible behavior relative to the surrounding observations; they are not detector-confirmed anomalies.
 
-This stage does not perform anomaly detection. Its purpose is to establish which observations are valid inputs to later analysis.
+## 1. Scenario and analysis configuration
 
-## 1. Problem: a metric file is not a service metric
-
-A common first assumption is that a metric file stored under a scenario folder contains only data for the service named by that scenario.
-
-For example:
+The notebook analyzes telemetry under:
 
 ```text
-Scenario folder:
-ts-auth-mongo_4.4.15_2022-07-13
-
-Metric file:
-ts-auth-service_3_Mongo_4.4.15.json_container_cpu_usage_seconds_total.json
+data/raw/ts-auth-mongo_4.4.15_2022-07-13
 ```
 
-The prefix identifies the experiment in which the data was collected. It does not identify the owner of every time series inside the file.
+The analysis separates two operational entities:
 
-The file is a Prometheus Matrix response for `container_cpu_usage_seconds_total`. Its `data.result` array contains thousands of labeled series collected from the cluster, including:
+- `application`: the `ts-auth-service` workload;
+- `mongo`: the MongoDB workload used by the service.
 
-- `ts-auth-service`
-- `ts-auth-mongo`
-- Other Train Ticket services
-- Kubernetes infrastructure
-- Container-level series
-- Pod-level cgroup series
-- Pod sandbox series
+For each entity, three Prometheus metrics are retained:
 
-Therefore, neither the scenario name nor the metric file name is sufficient for selecting application telemetry. Ownership must be inferred from the labels of each series.
-
-## 2. Problem: one workload can have several metric views
-
-Prometheus and cAdvisor expose Kubernetes resource usage at several hierarchy levels. The same workload can appear as an application container, a pod-level cgroup, and a pod sandbox.
-
-Consider a simplified memory example:
-
-```text
-Application container   100 MiB
-POD sandbox               5 MiB
-Pod total               105 MiB
-```
-
-These values are not three independent resource consumers. The pod total already includes the application container and sandbox usage.
-
-Adding them produces:
-
-```text
-100 + 5 + 105 = 210 MiB
-```
-
-This is hierarchical double counting. The workload actually uses approximately `105 MiB` at pod level, not `210 MiB`.
-
-The same ambiguity applies to CPU. A broad filter that selects every series whose `pod` contains `ts-auth` may retain both the container measurement and the enclosing pod cgroup measurement.
-
-## 3. Problem: application and database are different entities
-
-The substring `ts-auth` matches two distinct workloads:
-
-```text
-ts-auth-service  -> authentication application
-ts-auth-mongo    -> MongoDB dependency
-```
-
-Although they participate in the same request path, they represent different operational components. Their resource behavior must be attributed separately.
-
-For example, increased MongoDB CPU may indicate expensive queries while application CPU remains stable. If both are summed into a single `ts-auth` signal, the result loses component attribution and may incorrectly suggest that the application itself is responsible for the change.
-
-This leads to two normalized entities:
-
-| Entity | Kubernetes workload | Interpretation |
+| Metric | Raw type | Analysis unit |
 |---|---|---|
-| `application` | `ts-auth-service` | Authentication application resource usage |
-| `mongo` | `ts-auth-mongo` | Database dependency resource usage |
+| `container_cpu_usage_seconds_total` | Counter | CPU cores |
+| `container_memory_working_set_bytes` | Gauge | MiB |
+| `container_network_transmit_packets_total` | Counter | Packets/second |
 
-## 4. Reading the Prometheus Matrix JSON
+The common resampling interval is 30 seconds. Counter observations separated by more than 90 seconds are treated as an invalid rate interval.
 
-Canonical selection is applied to the structure returned by the Prometheus HTTP API. Each metric file in this scenario follows the Matrix result model:
+## 2. Canonical metric input
 
-```json
-{
-  "status": "success",
-  "data": {
-    "resultType": "matrix",
-    "result": [
-      {
-        "metric": {
-          "__name__": "<metric name>",
-          "pod": "<pod name>",
-          "container": "<container name>",
-          "instance": "<scrape target>",
-          "...": "other labels"
-        },
-        "values": [
-          [<unix timestamp>, "<sample value>"],
-          [<unix timestamp>, "<sample value>"]
-        ]
-      }
-    ]
-  }
-}
-```
+Prometheus exports several labeled views of the same Kubernetes workload. The notebook therefore selects one intended representation for each entity and metric before expanding the samples:
 
-The hierarchy has two important levels:
+- CPU and memory use the workload-container series;
+- network uses the pod network-namespace series (`container="POD"`);
+- application and MongoDB remain separate entities.
+
+The full rationale is in [Canonical Metric Series Selection](02_canonical_metric_series.md).
+
+The selected input contains **751 timestamped samples** across **15 lifecycle-specific source series**:
+
+| Entity | Metric | Source series | Distinct pods | Samples |
+|---|---|---:|---:|---:|
+| application | CPU | 2 | 2 | 130 |
+| application | Memory | 2 | 2 | 132 |
+| application | Network transmit | 2 | 2 | 130 |
+| mongo | CPU | 3 | 3 | 119 |
+| mongo | Memory | 3 | 3 | 121 |
+| mongo | Network transmit | 3 | 3 | 119 |
+
+The inventory includes multiple pod identities over the observation period. This does not mean all listed pods were active simultaneously; later time-bucket counts describe which series were actually observed at each timestamp.
+
+## 3. Transformation into analysis signals
+
+Raw Prometheus values are not directly comparable across metric types. CPU and network are cumulative counters, while memory is an instantaneous gauge.
+
+For each `series_id`, samples are ordered by timestamp and transformed independently. Keeping series boundaries prevents a delta from being calculated between two different pods or metric lifecycles.
+
+For CPU and network:
 
 ```text
-data.result[]         one element per labeled time series
-├── metric            label dictionary identifying the series
-└── values[]          ordered timestamp-value samples for that series
+elapsed_seconds = current_timestamp - previous_timestamp
+counter_delta   = current_value - previous_value
+signal_value    = counter_delta / elapsed_seconds
 ```
 
-`metric` does not contain a measurement value. It describes what the series represents. `values` contains the observations belonging to that identity. The sample value is encoded as a string by the Prometheus API and must be converted to a numeric type.
+This produces CPU cores for CPU usage and packets per second for network transmit activity. A rate is discarded when the counter decreases, the time interval is non-positive, the interval exceeds 90 seconds, or there is no previous observation.
 
-### 4.1 Labels used by canonical selection
+For memory:
 
-| JSON path | Purpose in this project |
+```text
+signal_value = value_bytes / 1024²
+```
+
+This converts the gauge directly to MiB without differencing.
+
+### Observed transformation quality
+
+| Entity | Metric | Rows | Valid signals | Counter resets | Invalid gaps |
+|---|---|---:|---:|---:|---:|
+| application | CPU | 130 | 128 | 0 | 0 |
+| application | Memory | 132 | 132 | 0 | 0 |
+| application | Network transmit | 130 | 128 | 0 | 0 |
+| mongo | CPU | 119 | 116 | 0 | 0 |
+| mongo | Memory | 121 | 121 | 0 | 0 |
+| mongo | Network transmit | 119 | 116 | 0 | 0 |
+
+No negative counter delta or excessive timestamp gap was observed. CPU and network have one unavailable rate at the start of each source series because a first counter sample has no preceding value. This explains the differences of two samples for application and three for MongoDB. Memory remains valid from its first sample because it is a gauge.
+
+## 4. Resampling and entity-level aggregation
+
+Each transformed series is resampled independently into 30-second buckets. If a bucket contains multiple valid observations, their mean becomes the bucket value. Empty buckets are removed; the notebook does not interpolate missing values.
+
+The resampled series are then grouped by:
+
+```text
+timestamp × entity × metric_name × unit
+```
+
+This changes the analytical level from individual source series to an entity-and-metric snapshot. The resulting features are:
+
+| Feature | Interpretation |
 |---|---|
-| `data.result[].metric.__name__` | Identifies CPU, memory, or network metric family |
-| `data.result[].metric.pod` | Identifies the Kubernetes pod and workload prefix |
-| `data.result[].metric.container` | Distinguishes workload-container, sandbox, and some hierarchy levels |
-| `data.result[].metric.image` | Supports verification of the running application or MongoDB image |
-| `data.result[].metric.instance` | Preserves the kubelet scrape target for provenance |
-| `data.result[].metric.id` | Exposes the underlying cgroup path and hierarchy level |
-| `data.result[].values` | Contains the timestamped samples retained after classification |
+| `value_sum` | Total observed resource use or activity across series |
+| `value_mean` | Mean value per observed series |
+| `value_median` | Typical series value, less sensitive to one high series |
+| `value_max` | Highest single-series value |
+| `active_pod_count` | Distinct pod labels contributing a valid value |
+| `observed_series_count` | Distinct canonical series contributing a valid value |
 
-The Prometheus label `service` is commonly `kubelet` in these container files. It identifies the scrape job or endpoint rather than the Train Ticket application service, so it is not used as application ownership.
-
-### 4.2 Example: canonical application CPU series
-
-The following shortened object is taken from the selected CPU metric file:
-
-```json
-{
-  "metric": {
-    "__name__": "container_cpu_usage_seconds_total",
-    "service": "kubelet",
-    "pod": "ts-auth-service-96d95d474-bdfpt",
-    "container": "ts-auth-service",
-    "image": "docker.io/codewisdom/ts-auth-service-with-jaeger:v1",
-    "instance": "10.252.1.21:10250",
-    "cpu": "total"
-  },
-  "values": [
-    [1657711577.09, "5.737832534"],
-    [1657711607.016, "12.950618888"]
-  ]
-}
-```
-
-This series is retained because:
+The chart labels `value_mean` as “Mean per pod.” This interpretation is exact only when one canonical series represents each pod for a given metric. More generally, it is the mean per observed series. Likewise:
 
 ```text
-metric name = CPU target metric
-container   = ts-auth-service
-entity      = application
-level       = workload container
+value_sum = value_mean × observed_series_count
 ```
 
-The two values are raw cumulative CPU-counter samples from the same labeled series. Canonical selection retains them without yet interpreting their change over time.
+Consequently, a separation between sum and mean reveals a change in the number of contributing series, while a change in mean reflects a change in the workload carried by the average contributing series.
 
-### 4.3 Example: overlapping pod-level CPU series
+## 5. Observed normalized metric timelines
 
-The same file contains another series for the same pod:
+![Normalized application and MongoDB metric timelines](../assets/02_normalized_metric_timelines.png)
 
-```json
-{
-  "metric": {
-    "__name__": "container_cpu_usage_seconds_total",
-    "service": "kubelet",
-    "pod": "ts-auth-service-96d95d474-bdfpt",
-    "instance": "10.252.1.21:10250",
-    "id": "/kubepods.slice/.../kubepods-burstable-pod9e27ecde_....slice",
-    "cpu": "total"
-  },
-  "values": [
-    [1657711577.09, "7.363367252"],
-    [1657711607.016, "13.022984171"]
-  ]
-}
-```
+The figure contains two entities by three metrics. The blue line is total activity (`value_sum`); the orange line is mean activity per observed series (`value_mean`).
 
-The `pod` label still contains `ts-auth-service`, but the workload-container label is absent and the `id` ends at the pod cgroup. This is a pod-level view. It is excluded from canonical CPU selection because retaining it together with the application-container series would introduce hierarchical overlap.
+### 5.1 Application CPU
 
-This example shows why filtering only on `pod contains "ts-auth-service"` is insufficient.
+Application CPU stays near approximately 0.00–0.01 cores for most of the early period, then rises sharply around 11:26–11:31 UTC. During the elevated interval:
 
-### 4.4 Example: canonical application network series
+- total CPU reaches approximately 0.20–0.24 cores;
+- mean CPU reaches approximately 0.09–0.12 cores;
+- total is roughly twice the mean.
 
-The network file represents the same application pod differently:
+The simultaneous increase of both sum and mean shows that the elevation is not explained only by an additional contributing series: CPU use per observed series also increased substantially. The approximate 2:1 ratio indicates two contributing series during much of this interval.
 
-```json
-{
-  "metric": {
-    "__name__": "container_network_transmit_packets_total",
-    "service": "kubelet",
-    "pod": "ts-auth-service-96d95d474-bdfpt",
-    "container": "POD",
-    "instance": "10.252.1.21:10250",
-    "interface": "eth0"
-  },
-  "values": [
-    [1657711592.124, "9"],
-    [1657711622.207, "10"]
-  ]
-}
-```
+After the interval, both CPU measures return close to their earlier level, apart from shorter isolated peaks.
 
-Here, `container="POD"` is retained because the metric measures the shared pod network namespace. The `pod` prefix attributes the series to the application:
+### 5.2 Application memory
+
+Application memory initially remains near 340 MiB, with sum and mean overlapping. Around 11:25 UTC, the two measures move in opposite directions:
+
+- total memory rises toward approximately 580 MiB;
+- mean memory initially falls to approximately 170 MiB and then increases toward 290 MiB;
+- total becomes approximately twice the mean.
+
+This is mathematically consistent with a composition change from one contributing series to two. A newly observed series with a lower initial working set can increase the total while reducing the mean. Later, the total falls to approximately 250–270 MiB and overlaps the mean again, consistent with a return to one contributing series.
+
+The plot supports a lifecycle or topology transition, but does not identify its cause. Rollout, restart, rescheduling, or scaling are plausible hypotheses that require pod metadata or event/log evidence.
+
+### 5.3 Application network transmit
+
+Application network transmit is more variable than its CPU and memory baselines. Much of the series fluctuates around approximately 0.3–0.6 packets/second, with several isolated peaks. Activity becomes more volatile around and after 11:25 UTC, including peaks near 1.7 packets/second.
+
+Sum and mean overlap for much of the timeline and separate during parts of the transition interval. This indicates that the number of contributing network series changes over time. The larger peaks describe increased transmit activity, but the plot alone cannot distinguish workload traffic from lifecycle-related communication.
+
+### 5.4 MongoDB CPU
+
+MongoDB CPU fluctuates primarily around approximately 0.003–0.010 cores, with a maximum visible peak near 0.015 cores around 11:30 UTC. Its sum and mean almost completely overlap, indicating one contributing canonical series at most timestamps.
+
+MongoDB CPU does not show an elevation comparable in magnitude or duration to the application CPU interval. The strongest CPU change in this figure is therefore localized to the application side, although this observation does not establish the source of the workload.
+
+### 5.5 MongoDB memory
+
+MongoDB memory is initially stable near 112–114 MiB. Around 11:25 UTC it contains a one-bucket drop to approximately zero, followed by recovery to a lower range near 58–70 MiB and a gradual stepwise increase.
+
+Because empty resampling buckets are removed with `dropna()`, the near-zero point is not simply an empty bucket converted to zero; at least one retained memory observation in that bucket was near zero. The abrupt drop and lower post-transition baseline are consistent with a MongoDB series or process lifecycle change, but restart and deployment evidence is needed before assigning a cause.
+
+The sum and mean remain nearly coincident, so the visible level change is not explained by simultaneous aggregation of several MongoDB series.
+
+### 5.6 MongoDB network transmit
+
+MongoDB network transmit is generally near 0.07–0.13 packets/second, with short peaks around 11:29–11:35 UTC. The largest reaches approximately 0.6 packets/second. Sum and mean overlap almost entirely, again indicating one contributing series at most timestamps.
+
+The MongoDB network peak occurs near the application CPU and network elevation. This temporal alignment is useful correlation evidence for later analysis, but it does not by itself prove that application activity caused the MongoDB traffic.
+
+### 5.7 Cross-metric interpretation
+
+The most prominent shared transition is concentrated around 11:25–11:31 UTC:
+
+- application CPU rises sharply both in total and per-series terms;
+- application memory changes composition and then settles at a lower level;
+- application network activity becomes more volatile;
+- MongoDB memory changes baseline;
+- MongoDB network produces short peaks while MongoDB CPU increases only modestly.
+
+This combination is compatible with a workload and deployment/lifecycle transition occurring in the same period. It is not yet sufficient to separate a fault from an intentional rollout or scaling event. That distinction belongs to later detection and cross-signal correlation stages.
+
+## 6. Features retained for anomaly scoring
+
+Although the entity-level table computes sum, mean, median, and maximum, the notebook selects three numerical views for independent scoring:
 
 ```text
-metric name = network target metric
-container   = POD
-pod prefix  = ts-auth-service-
-entity      = application
+value_sum
+value_mean
+value_max
 ```
 
-The comparison illustrates that the same label value cannot be accepted or rejected independently of metric semantics. `container="POD"` is excluded for CPU and memory but is canonical for network in the observed dataset.
+They preserve complementary behavior:
 
-### 4.5 From JSON object to selection decision
+- `value_sum` detects a change in total entity demand;
+- `value_mean` detects a change in average demand per contributing series;
+- `value_max` preserves a high single-series event that aggregation could dilute.
 
-For every element in `data.result`, canonical preprocessing makes the following decision:
+`active_pod_count` and `observed_series_count` remain attached as context columns. They are not melted into scored values at this stage, but are essential for explaining whether a sum change coincides with scaling, lifecycle turnover, or missing observations.
 
-| Metric labels | Decision | Reason |
-|---|---|---|
-| CPU/memory + `container=ts-auth-service` | Retain as `application` | Correct workload-container level |
-| CPU/memory + `container=ts-auth-mongo` | Retain as `mongo` | Correct workload-container level |
-| CPU/memory + missing container or `container=POD` | Exclude | Overlapping or non-workload level |
-| Network + `container=POD` + application pod prefix | Retain as `application` | Shared application pod network namespace |
-| Network + `container=POD` + MongoDB pod prefix | Retain as `mongo` | Shared MongoDB pod network namespace |
-| Unrelated workload labels | Exclude | Outside the entities in scope |
+`value_median` is retained in the aggregate table but is not selected by `FEATURES_TO_SCORE`. It remains available for robust descriptive comparisons or a later detector design.
 
-Only after this series-level decision is accepted are the entries in `values` expanded into rows in `raw_metrics`.
+## 7. Detection-ready representation and findings
 
-## 5. Motivation for canonical selection
-
-An analytical metric must have an explicit observation unit. In this scenario, a usable series must answer both questions:
-
-1. **Which entity does this measurement belong to?**
-2. **At which Kubernetes hierarchy level is it measured?**
-
-Without these definitions, a numeric value may be technically valid but semantically ambiguous.
-
-Canonical selection is introduced to provide:
-
-- **Entity attribution:** application and database remain distinguishable.
-- **Non-overlapping measurement:** only one resource view is selected for a metric.
-- **Reproducibility:** selection is expressed as deterministic label rules.
-- **Auditability:** every retained sample preserves its source labels.
-- **Construct validity:** the resulting series measures the component and resource concept it claims to represent.
-
-This preprocessing step is consequently part of the measurement design, not merely a performance optimization or data-cleaning convenience.
-
-## 6. Definition of a canonical series
-
-In this project, a **canonical metric series** is the intentionally selected Prometheus series used as the authoritative representation of one metric for one normalized entity.
-
-Canonical does not mean that the source series is globally unique or universally correct. It means that, for the analytical question and dataset schema currently in scope, the series has been selected according to an explicit and non-overlapping rule.
-
-A canonical selection rule specifies:
+The aggregate table is converted from wide to long form. Each row represents one independently scoreable stream:
 
 ```text
-metric family
-+ entity identity
-+ Kubernetes measurement level
-= retained series
+timestamp
+entity
+metric_name
+feature_name
+observed_value
+unit
+active_pod_count
+observed_series_count
 ```
 
-For example:
+With two entities, three metrics, and three selected feature types, the downstream detector receives 18 logical streams:
 
 ```text
-CPU
-+ application
-+ container-level measurement
-= container == "ts-auth-service"
+2 entities × 3 metrics × 3 features = 18 streams
 ```
 
-A series that does not satisfy a canonical rule is excluded from this analysis, even if its name contains `ts-auth`.
+The preparation stages establish the following evidence for subsequent anomaly detection:
 
-## 7. Why the selection rule depends on the metric
+1. Canonical selection prevents overlapping Kubernetes resource views from being added together.
+2. Counter rates are calculated within source-series boundaries and no reset or excessive gap was observed.
+3. All metrics share 30-second analysis buckets without synthetic interpolation.
+4. Entity-level totals and per-series statistics preserve both system-wide and localized behavior.
+5. A clear multi-metric transition appears around 11:25–11:31 UTC, led by application CPU and accompanied by application composition changes and MongoDB memory/network changes.
+6. Pod and series counts must remain part of the evidence used to interpret any alert raised during that transition.
 
-CPU, memory, and network are not represented identically by cAdvisor.
-
-### 7.1 CPU and memory
-
-The analysis asks how much CPU or memory the actual workload container uses. The canonical representation is therefore the container-level series:
-
-```text
-container = "ts-auth-service"
-```
-
-or:
-
-```text
-container = "ts-auth-mongo"
-```
-
-Series with `container="POD"` or a missing container label are not used for CPU and memory because they represent a different hierarchy level and may overlap with the selected workload-container value.
-
-### 7.2 Network
-
-Containers inside a Kubernetes pod share the pod network namespace. In the observed dataset, network transmit metrics are associated with:
-
-```text
-container = "POD"
-```
-
-The label `container="POD"` identifies the correct measurement level but does not identify whether the pod belongs to the application or MongoDB. The `pod` label supplies that ownership information:
-
-```text
-pod starts with "ts-auth-service-" -> application
-pod starts with "ts-auth-mongo-"   -> mongo
-```
-
-The meaning of `container="POD"` is therefore metric-dependent. It is excluded for CPU and memory but retained for network in this dataset.
-
-## 8. Canonical selection policy
-
-The complete policy is:
-
-| Metric | Canonical application rule | Canonical MongoDB rule | Excluded overlapping views |
-|---|---|---|---|
-| `container_cpu_usage_seconds_total` | `container == "ts-auth-service"` | `container == "ts-auth-mongo"` | `container="POD"`, missing container, pod cgroup |
-| `container_memory_working_set_bytes` | `container == "ts-auth-service"` | `container == "ts-auth-mongo"` | `container="POD"`, missing container, pod cgroup |
-| `container_network_transmit_packets_total` | `container == "POD"` and application pod prefix | `container == "POD"` and MongoDB pod prefix | Other pods and network interfaces outside the target entities |
-
-This policy creates six logical groups:
-
-```text
-application + CPU
-application + memory
-application + network
-mongo       + CPU
-mongo       + memory
-mongo       + network
-```
-
-The groups remain separate. Canonical selection does not combine application and database measurements into a single total.
-
-## 9. Implementation
-
-The notebook implements the policy in `classify_series(labels)`:
-
-```python
-def classify_series(labels):
-    metric_name = labels.get("__name__")
-    pod = str(labels.get("pod") or "")
-    container = labels.get("container")
-
-    if metric_name not in TARGET_METRICS:
-        return None
-
-    if metric_name in {CPU_METRIC, MEMORY_METRIC}:
-        if container == "ts-auth-service":
-            return "application"
-
-        if container == "ts-auth-mongo":
-            return "mongo"
-
-        return None
-
-    if metric_name == NETWORK_METRIC and container == "POD":
-        if pod.startswith("ts-auth-service-"):
-            return "application"
-
-        if pod.startswith("ts-auth-mongo-"):
-            return "mongo"
-
-    return None
-```
-
-The return value defines the selection decision:
-
-| Return value | Meaning |
-|---|---|
-| `application` | Retain the series and attribute it to `ts-auth-service` |
-| `mongo` | Retain the series and attribute it to `ts-auth-mongo` |
-| `None` | Exclude the series from the canonical dataset |
-
-The function operates on series labels before individual timestamp-value pairs are expanded. This avoids loading unrelated cluster series into the canonical dataset.
-
-## 10. Canonical data representation
-
-Each retained timestamp-value pair becomes one row in `raw_metrics`:
-
-| Field | Meaning |
-|---|---|
-| `timestamp` | Prometheus sample timestamp converted from Unix time to UTC |
-| `value` | Raw Prometheus sample value |
-| `series_id` | Identifier assigned to one source time series |
-| `entity` | `application` or `mongo` |
-| `metric_name` | Prometheus metric name |
-| `pod` | Source Kubernetes pod |
-| `container` | Source container or pod network namespace label |
-| `image` | Source container image when available |
-| `instance` | Prometheus scrape target |
-
-The result uses long format. The six logical groups occupy rows distinguished by `entity` and `metric_name`; they are not merged into six measurement columns.
-
-Two intermediate tables are retained:
-
-- `series_inventory`: one row per canonical source series, used to inspect identity, labels, and sample coverage.
-- `raw_metrics`: one row per retained timestamped sample, used as the canonical input dataset.
-
-`series_id` preserves source-series boundaries. This is necessary because two pods that expose the same metric are still different time series.
-
-## 11. Observed result for the selected scenario
-
-Canonical selection reduces the cluster-wide metric responses to 15 source series and 751 samples:
-
-| Entity | Metric | Canonical series | Samples |
-|---|---|---:|---:|
-| `application` | CPU | 2 | 130 |
-| `application` | Memory | 2 | 132 |
-| `application` | Network | 2 | 130 |
-| `mongo` | CPU | 3 | 119 |
-| `mongo` | Memory | 3 | 121 |
-| `mongo` | Network | 3 | 119 |
-| **Total** |  | **15** | **751** |
-
-The presence of multiple series for an entity reflects multiple pod identities during the observation period. It does not imply that all of those pods were active concurrently for the entire hour.
-
-This result should be interpreted as six canonical entity-metric groups backed by 15 lifecycle-specific source series.
-
-## 12. Validation invariants
-
-The selection is checked through explicit invariants:
-
-1. CPU and memory series must have a non-empty workload-container label.
-2. CPU and memory series must not use `container="POD"`.
-3. Network series must use `container="POD"` under the observed dataset schema.
-4. A `series_id` must belong to only one normalized entity.
-5. Application and MongoDB series must remain distinguishable.
-
-These checks are important because a rule can execute successfully while still selecting the wrong semantic level. Assertions make schema assumptions visible and cause the notebook to fail early when those assumptions are violated.
-
-## 13. Scope and limitations
-
-The canonical policy is derived from the labels observed in `ts-auth-mongo_4.4.15_2022-07-13`. It is appropriate for the current proof of concept but should not be treated as a universal Prometheus rule.
-
-Potential variations include:
-
-- Different exporters or cAdvisor versions
-- Different container and pod naming conventions
-- Additional sidecar containers
-- Network metrics attached to another label combination
-- Workloads whose names share ambiguous prefixes
-
-For another dataset family, the label schema and hierarchy must be profiled before reusing these rules. A production implementation should express entity mappings and canonical policies through configuration rather than hard-coded service names.
-
-## 14. Conclusion
-
-Raw Prometheus data does not provide an analysis-ready definition of “application CPU,” “database memory,” or “service network.” That definition must be constructed from metric semantics, Kubernetes hierarchy, and workload identity.
-
-Canonical selection provides this definition by:
-
-- Separating `ts-auth-service` from `ts-auth-mongo`
-- Selecting a single non-overlapping measurement level for each metric
-- Preserving source labels and series identity
-- Excluding unrelated cluster telemetry
-
-The output is not an anomaly result. It is a semantically controlled measurement dataset on which later analysis can be based.
+The next notebook stage applies a leakage-aware rolling median and median absolute deviation detector. Detector thresholds, anomaly labels, and alert evaluation are intentionally not reported here because they occur after section 7.
