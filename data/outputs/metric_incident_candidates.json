@@ -1,0 +1,519 @@
+{
+  "schema_name": "aiops.metric_incident_candidates",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-07-08T07:15:35.330792Z",
+  "producer": {
+    "name": "02_metrics_detection",
+    "pipeline_stage": "metric_detection_and_correlation",
+    "detector": "rolling_median_mad",
+    "correlator_version": "1.0.0"
+  },
+  "time_contract": {
+    "normalized_timezone": "UTC",
+    "timestamp_format": "RFC3339",
+    "interval_semantics": "closed",
+    "native_resolution_seconds": 30,
+    "default_correlation_tolerance_seconds": 90
+  },
+  "provenance": {
+    "notebook": "notebooks/02_metrics_detection.ipynb",
+    "timestamp_normalization": {
+      "source_timezone": "UTC",
+      "applied_offset_seconds": 0,
+      "assumption": false
+    }
+  },
+  "candidates": [
+    {
+      "candidate_id": "mic_85a3984a16912dc8",
+      "signal_source": "metrics",
+      "event_time": {
+        "start": "2022-07-13T10:59:30Z",
+        "end": "2022-07-13T11:01:00Z",
+        "duration_seconds": 90.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "affected_metrics": [
+          "container_cpu_usage_seconds_total",
+          "container_network_transmit_packets_total"
+        ],
+        "anomaly_point_count": 18,
+        "max_abs_score": 10.07578930486948,
+        "contributor_count_changed": false
+      },
+      "evidence": [
+        {
+          "entity_role": "application",
+          "service": {
+            "namespace": "train-ticket",
+            "name": "ts-auth-service"
+          },
+          "event_time": {
+            "start": "2022-07-13T10:59:30Z",
+            "end": "2022-07-13T11:01:00Z"
+          },
+          "incident_type": "correlated_resource_event",
+          "metric_evidence": [
+            {
+              "metric_name": "container_network_transmit_packets_total",
+              "event_time": {
+                "start": "2022-07-13T10:59:30Z",
+                "end": "2022-07-13T11:00:30Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_max",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_max",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "low"
+                }
+              ],
+              "pattern": "single_contributor_duplicate_views",
+              "anomaly_point_count": 9,
+              "max_abs_score": 10.07578930486948,
+              "single_contributor": true,
+              "contributor_count_changed": false
+            },
+            {
+              "metric_name": "container_cpu_usage_seconds_total",
+              "event_time": {
+                "start": "2022-07-13T11:00:00Z",
+                "end": "2022-07-13T11:01:00Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_max",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_max",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "low"
+                }
+              ],
+              "pattern": "single_contributor_duplicate_views",
+              "anomaly_point_count": 9,
+              "max_abs_score": 6.681599008943956,
+              "single_contributor": true,
+              "contributor_count_changed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate_id": "mic_b541dfeaa3ebbeea",
+      "signal_source": "metrics",
+      "event_time": {
+        "start": "2022-07-13T11:25:00Z",
+        "end": "2022-07-13T11:33:00Z",
+        "duration_seconds": 480.0
+      },
+      "scope": {
+        "level": "cross_entity",
+        "entities": [
+          {
+            "role": "database",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-mongo"
+            }
+          },
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-mongo",
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "affected_metrics": [
+          "container_cpu_usage_seconds_total",
+          "container_memory_working_set_bytes",
+          "container_network_transmit_packets_total"
+        ],
+        "anomaly_point_count": 61,
+        "max_abs_score": 578.2227861246536,
+        "contributor_count_changed": true
+      },
+      "evidence": [
+        {
+          "entity_role": "application",
+          "service": {
+            "namespace": "train-ticket",
+            "name": "ts-auth-service"
+          },
+          "event_time": {
+            "start": "2022-07-13T11:25:30Z",
+            "end": "2022-07-13T11:28:00Z"
+          },
+          "incident_type": "correlated_resource_event",
+          "metric_evidence": [
+            {
+              "metric_name": "container_cpu_usage_seconds_total",
+              "event_time": {
+                "start": "2022-07-13T11:26:30Z",
+                "end": "2022-07-13T11:27:30Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_max",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "high"
+                }
+              ],
+              "pattern": "broad_load_increase",
+              "anomaly_point_count": 9,
+              "max_abs_score": 578.2227861246536,
+              "single_contributor": false,
+              "contributor_count_changed": true
+            },
+            {
+              "metric_name": "container_memory_working_set_bytes",
+              "event_time": {
+                "start": "2022-07-13T11:25:30Z",
+                "end": "2022-07-13T11:28:00Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_mean",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "high"
+                }
+              ],
+              "pattern": "possible_composition_change",
+              "anomaly_point_count": 8,
+              "max_abs_score": 99.9733857903263,
+              "single_contributor": false,
+              "contributor_count_changed": true
+            }
+          ]
+        },
+        {
+          "entity_role": "application",
+          "service": {
+            "namespace": "train-ticket",
+            "name": "ts-auth-service"
+          },
+          "event_time": {
+            "start": "2022-07-13T11:31:30Z",
+            "end": "2022-07-13T11:33:00Z"
+          },
+          "incident_type": "single_metric_event",
+          "metric_evidence": [
+            {
+              "metric_name": "container_memory_working_set_bytes",
+              "event_time": {
+                "start": "2022-07-13T11:31:30Z",
+                "end": "2022-07-13T11:33:00Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_max",
+                  "direction": "low"
+                }
+              ],
+              "pattern": "single_feature_change",
+              "anomaly_point_count": 4,
+              "max_abs_score": 50.92571164082388,
+              "single_contributor": true,
+              "contributor_count_changed": true
+            }
+          ]
+        },
+        {
+          "entity_role": "database",
+          "service": {
+            "namespace": "train-ticket",
+            "name": "ts-auth-mongo"
+          },
+          "event_time": {
+            "start": "2022-07-13T11:25:00Z",
+            "end": "2022-07-13T11:27:00Z"
+          },
+          "incident_type": "single_metric_event",
+          "metric_evidence": [
+            {
+              "metric_name": "container_memory_working_set_bytes",
+              "event_time": {
+                "start": "2022-07-13T11:25:00Z",
+                "end": "2022-07-13T11:27:00Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_max",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "low"
+                }
+              ],
+              "pattern": "possible_lifecycle_or_telemetry_drop",
+              "anomaly_point_count": 13,
+              "max_abs_score": 99.97412767131794,
+              "single_contributor": false,
+              "contributor_count_changed": true
+            }
+          ]
+        },
+        {
+          "entity_role": "database",
+          "service": {
+            "namespace": "train-ticket",
+            "name": "ts-auth-mongo"
+          },
+          "event_time": {
+            "start": "2022-07-13T11:29:00Z",
+            "end": "2022-07-13T11:32:30Z"
+          },
+          "incident_type": "correlated_resource_event",
+          "metric_evidence": [
+            {
+              "metric_name": "container_network_transmit_packets_total",
+              "event_time": {
+                "start": "2022-07-13T11:29:00Z",
+                "end": "2022-07-13T11:32:30Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_max",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_max",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "low"
+                }
+              ],
+              "pattern": "single_contributor_duplicate_views",
+              "anomaly_point_count": 18,
+              "max_abs_score": 7.65894268912742,
+              "single_contributor": true,
+              "contributor_count_changed": false
+            },
+            {
+              "metric_name": "container_cpu_usage_seconds_total",
+              "event_time": {
+                "start": "2022-07-13T11:30:30Z",
+                "end": "2022-07-13T11:31:30Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_max",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_max",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "low"
+                }
+              ],
+              "pattern": "single_contributor_duplicate_views",
+              "anomaly_point_count": 9,
+              "max_abs_score": 6.0135904143863765,
+              "single_contributor": true,
+              "contributor_count_changed": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "candidate_id": "mic_51b6b1e4ab7d6e0d",
+      "signal_source": "metrics",
+      "event_time": {
+        "start": "2022-07-13T11:45:30Z",
+        "end": "2022-07-13T11:46:30Z",
+        "duration_seconds": 60.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "affected_metrics": [
+          "container_network_transmit_packets_total"
+        ],
+        "anomaly_point_count": 9,
+        "max_abs_score": 4.1405938712023636,
+        "contributor_count_changed": false
+      },
+      "evidence": [
+        {
+          "entity_role": "application",
+          "service": {
+            "namespace": "train-ticket",
+            "name": "ts-auth-service"
+          },
+          "event_time": {
+            "start": "2022-07-13T11:45:30Z",
+            "end": "2022-07-13T11:46:30Z"
+          },
+          "incident_type": "single_metric_event",
+          "metric_evidence": [
+            {
+              "metric_name": "container_network_transmit_packets_total",
+              "event_time": {
+                "start": "2022-07-13T11:45:30Z",
+                "end": "2022-07-13T11:46:30Z"
+              },
+              "feature_signals": [
+                {
+                  "feature": "value_max",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_max",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_mean",
+                  "direction": "low"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "high"
+                },
+                {
+                  "feature": "value_sum",
+                  "direction": "low"
+                }
+              ],
+              "pattern": "single_contributor_duplicate_views",
+              "anomaly_point_count": 9,
+              "max_abs_score": 4.1405938712023636,
+              "single_contributor": true,
+              "contributor_count_changed": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
