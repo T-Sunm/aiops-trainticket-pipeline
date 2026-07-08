@@ -435,6 +435,13 @@ The full flow reduces the detector output as follows:
 - consolidates four component incidents into one scenario candidate;
 - contains a change in the number of observed metric contributors.
 
+In the exported artifact, `scenario_incident_0002` corresponds to candidate
+`mic_b541dfeaa3ebbeea` in
+[`metric_incident_candidates.json`](../data/outputs/metric_incident_candidates.json).
+The timeline below is derived from its `evidence[].metric_evidence[]` entries,
+using `event_time`, `feature_signals`, and `contributor_count_changed` rather
+than from the summary table above.
+
 Its internal evidence supports a cautious narrative:
 
 1. MongoDB memory falls and its contributor membership changes around 11:25–11:27.
