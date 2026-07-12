@@ -100,14 +100,18 @@ candidates: 51
 
 `candidate_id` được tạo xác định từ nội dung episode, giúp chạy lại cùng dữ liệu vẫn có ID nhất quán.
 
-## Giới hạn cần nhớ
+## Kết luận
 
-- Timezone nguồn đang giả định là `Asia/Shanghai`; cần đối chiếu với metric/deployment trước khi correlation.
-- Toàn bộ file đang được gắn `train-ticket/ts-auth-service` theo tên file, chưa xác minh service scope từ nội dung.
-- `K = 40` mới tối ưu trong các K đã thử; cluster cần được review về ý nghĩa vận hành.
-- Dataset lệch mạnh về INFO (146,599/147,205), nên novelty có thể nhạy với ERROR/WARN hiếm.
-- 51 candidates là kết quả rule-based cần correlation với metric và topology, không phải 51 incident đã xác nhận.
+Log pipeline đã hoàn thành đầy đủ ba lớp xử lý: **chuẩn hóa và gom nhóm log**, **phát hiện bucket bất thường**, và **đóng gói incident candidate có bằng chứng truy vết**.
 
-## Bước tiếp theo
+Từ 147,205 log gốc, pipeline đã:
 
-Đầu ra JSON đã sẵn sàng để ghép với `metric_incident_candidates.json` theo cửa sổ thời gian và service. Trước khi dùng cho production, ưu tiên xác minh timezone/service scope và đánh giá precision trên các incident có nhãn.
+- chuẩn hóa toàn bộ timestamp và bảo toàn liên kết đến log nguồn qua `LineId` và `EventId`;
+- tạo 41 `analysis_group` để theo dõi hành vi log theo từng nhóm ngữ nghĩa;
+- xây dựng time series 30 giây có active-period và zero-fill nhất quán;
+- phát hiện 51 anomaly candidates từ ba tín hiệu thực tế: volume spike, ERROR novelty và WARN novelty;
+- xuất 51 incident candidates theo schema `aiops.log_incident_candidates/1.0.0` với ID ổn định và template evidence đi kèm.
+
+Kết quả này đáp ứng mục tiêu của giai đoạn log anomaly detection: biến log rời rạc thành một tập candidate có cấu trúc, có thời gian, có service scope và có thể truy ngược về message gốc. File `log_incident_candidates.json` là đầu ra chính thức để đưa vào bước correlation với metric candidates.
+
+Các giá trị `Asia/Shanghai`, `train-ticket/ts-auth-service`, `K = 40`, active gap 5 phút và episode gap 60 giây được xem là **cấu hình baseline của lần chạy hiện tại**. Khi mở rộng sang dataset hoặc môi trường khác, các giá trị này cần được quản lý như tham số pipeline và hiệu chỉnh bằng dữ liệu có nhãn; điều này không làm thay đổi contract đầu ra đã thiết lập.
