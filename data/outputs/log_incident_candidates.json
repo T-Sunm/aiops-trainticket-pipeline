@@ -1,0 +1,3245 @@
+{
+  "schema_name": "aiops.log_incident_candidates",
+  "schema_version": "1.0.0",
+  "generated_at": "2026-07-12T06:12:10.445718Z",
+  "producer": {
+    "name": "03_3_logs_episode_aggregation",
+    "pipeline_stage": "log_episode_aggregation",
+    "detector": "robust_baseline_and_novelty",
+    "correlator_version": "1.0.0"
+  },
+  "time_contract": {
+    "normalized_timezone": "UTC",
+    "timestamp_format": "RFC3339",
+    "interval_semantics": "closed",
+    "native_resolution_seconds": 30,
+    "default_correlation_tolerance_seconds": 90
+  },
+  "provenance": {
+    "notebook": "notebooks/03_3_logs_episode_aggregation.ipynb",
+    "input": "data/processed/log_anomaly_candidates.csv",
+    "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+    "timestamp_normalization": {
+      "source_timezone": "Asia/Shanghai",
+      "normalized_timezone": "UTC",
+      "source_utc_offset_seconds": 28800,
+      "applied_offset_seconds": -28800,
+      "assumption": true
+    }
+  },
+  "candidates": [
+    {
+      "candidate_id": "lic_3018fd86cc77652e",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T13:42:30Z",
+        "end": "2022-06-14T13:43:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_21",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 4,
+        "info_count": 3,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.25,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_3018fd86cc77652e",
+          "active_period_id": "12",
+          "analysis_group": "semantic_cluster_21",
+          "event_time": {
+            "start": "2022-06-14T13:42:30Z",
+            "end": "2022-06-14T13:43:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 4,
+            "info": 3,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_01062be98cbcd900",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T13:42:30Z",
+        "end": "2022-06-14T13:43:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_28",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 3,
+        "info_count": 2,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.3333333333333333,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_01062be98cbcd900",
+          "active_period_id": "12",
+          "analysis_group": "semantic_cluster_28",
+          "event_time": {
+            "start": "2022-06-14T13:42:30Z",
+            "end": "2022-06-14T13:43:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 3,
+            "info": 2,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_add3a15e0af8facc",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T14:17:00Z",
+        "end": "2022-06-14T14:17:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_33",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 1.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_add3a15e0af8facc",
+          "active_period_id": "13",
+          "analysis_group": "semantic_cluster_33",
+          "event_time": {
+            "start": "2022-06-14T14:17:00Z",
+            "end": "2022-06-14T14:17:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_914182274afbbb77",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T14:18:00Z",
+        "end": "2022-06-14T14:18:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_12",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 1.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_914182274afbbb77",
+          "active_period_id": "13",
+          "analysis_group": "semantic_cluster_12",
+          "event_time": {
+            "start": "2022-06-14T14:18:00Z",
+            "end": "2022-06-14T14:18:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_2e9990dabfed0c35",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T14:18:00Z",
+        "end": "2022-06-14T14:18:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_18",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 3,
+        "info_count": 2,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.3333333333333333,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_2e9990dabfed0c35",
+          "active_period_id": "13",
+          "analysis_group": "semantic_cluster_18",
+          "event_time": {
+            "start": "2022-06-14T14:18:00Z",
+            "end": "2022-06-14T14:18:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 3,
+            "info": 2,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_37400cec8baa82ff",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T18:31:30Z",
+        "end": "2022-06-14T18:32:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_24",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 1.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_37400cec8baa82ff",
+          "active_period_id": "14",
+          "analysis_group": "semantic_cluster_24",
+          "event_time": {
+            "start": "2022-06-14T18:31:30Z",
+            "end": "2022-06-14T18:32:00Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_01118b050f838fbc",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T19:14:30Z",
+        "end": "2022-06-14T19:15:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_37",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 2,
+        "info_count": 1,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.5,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_01118b050f838fbc",
+          "active_period_id": "16",
+          "analysis_group": "semantic_cluster_37",
+          "event_time": {
+            "start": "2022-06-14T19:14:30Z",
+            "end": "2022-06-14T19:15:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 2,
+            "info": 1,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_0e26a54496bceba8",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T19:21:00Z",
+        "end": "2022-06-14T19:21:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_0",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 2,
+        "info_count": 1,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.5,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_0e26a54496bceba8",
+          "active_period_id": "16",
+          "analysis_group": "semantic_cluster_0",
+          "event_time": {
+            "start": "2022-06-14T19:21:00Z",
+            "end": "2022-06-14T19:21:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 2,
+            "info": 1,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_6c95c254e56aca20",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T19:21:00Z",
+        "end": "2022-06-14T19:21:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_19",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 1.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_6c95c254e56aca20",
+          "active_period_id": "16",
+          "analysis_group": "semantic_cluster_19",
+          "event_time": {
+            "start": "2022-06-14T19:21:00Z",
+            "end": "2022-06-14T19:21:30Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_6385456c96ecb213",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T19:21:00Z",
+        "end": "2022-06-14T19:21:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_33",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 1.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_6385456c96ecb213",
+          "active_period_id": "16",
+          "analysis_group": "semantic_cluster_33",
+          "event_time": {
+            "start": "2022-06-14T19:21:00Z",
+            "end": "2022-06-14T19:21:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_bf90d6c3159ab000",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-14T19:34:00Z",
+        "end": "2022-06-14T19:34:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_27",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 4,
+        "info_count": 3,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.25,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_bf90d6c3159ab000",
+          "active_period_id": "16",
+          "analysis_group": "semantic_cluster_27",
+          "event_time": {
+            "start": "2022-06-14T19:34:00Z",
+            "end": "2022-06-14T19:34:30Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 4,
+            "info": 3,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_4cd6e29fa4dc186d",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-15T07:47:00Z",
+        "end": "2022-06-15T07:47:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_19",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 4,
+        "info_count": 3,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.25,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_4cd6e29fa4dc186d",
+          "active_period_id": "18",
+          "analysis_group": "semantic_cluster_19",
+          "event_time": {
+            "start": "2022-06-15T07:47:00Z",
+            "end": "2022-06-15T07:47:30Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 4,
+            "info": 3,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_4794e9e8e35b850d",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-20T14:02:00Z",
+        "end": "2022-06-20T14:02:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_18",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 4,
+        "info_count": 3,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.25,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_4794e9e8e35b850d",
+          "active_period_id": "23",
+          "analysis_group": "semantic_cluster_18",
+          "event_time": {
+            "start": "2022-06-20T14:02:00Z",
+            "end": "2022-06-20T14:02:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 4,
+            "info": 3,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_1df83ee7a605d8ad",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-20T14:03:30Z",
+        "end": "2022-06-20T14:04:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_19",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 2,
+        "info_count": 1,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.5,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_1df83ee7a605d8ad",
+          "active_period_id": "23",
+          "analysis_group": "semantic_cluster_19",
+          "event_time": {
+            "start": "2022-06-20T14:03:30Z",
+            "end": "2022-06-20T14:04:00Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 2,
+            "info": 1,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_c680ccb057e50425",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-20T16:51:30Z",
+        "end": "2022-06-20T16:52:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_0",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 3,
+        "info_count": 2,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.3333333333333333,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_c680ccb057e50425",
+          "active_period_id": "27",
+          "analysis_group": "semantic_cluster_0",
+          "event_time": {
+            "start": "2022-06-20T16:51:30Z",
+            "end": "2022-06-20T16:52:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 3,
+            "info": 2,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_6edcfed85e927094",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-20T16:51:30Z",
+        "end": "2022-06-20T16:52:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_12",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 3,
+        "info_count": 2,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.3333333333333333,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_6edcfed85e927094",
+          "active_period_id": "27",
+          "analysis_group": "semantic_cluster_12",
+          "event_time": {
+            "start": "2022-06-20T16:51:30Z",
+            "end": "2022-06-20T16:52:00Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 3,
+            "info": 2,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_d10e8e16143710e2",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-20T16:51:30Z",
+        "end": "2022-06-20T16:52:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_33",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 2,
+        "info_count": 1,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.5,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_d10e8e16143710e2",
+          "active_period_id": "27",
+          "analysis_group": "semantic_cluster_33",
+          "event_time": {
+            "start": "2022-06-20T16:51:30Z",
+            "end": "2022-06-20T16:52:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 2,
+            "info": 1,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_b11bf8f3a2c1b9a5",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-30T09:34:00Z",
+        "end": "2022-06-30T09:34:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_12",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 1.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_b11bf8f3a2c1b9a5",
+          "active_period_id": "56",
+          "analysis_group": "semantic_cluster_12",
+          "event_time": {
+            "start": "2022-06-30T09:34:00Z",
+            "end": "2022-06-30T09:34:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_1ad32ee6d366d38f",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-30T09:34:00Z",
+        "end": "2022-06-30T09:34:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_33",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 4,
+        "info_count": 2,
+        "warn_count": 0,
+        "error_count": 2,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.5,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_1ad32ee6d366d38f",
+          "active_period_id": "56",
+          "analysis_group": "semantic_cluster_33",
+          "event_time": {
+            "start": "2022-06-30T09:34:00Z",
+            "end": "2022-06-30T09:34:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 4,
+            "info": 2,
+            "warnings": 0,
+            "errors": 2
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_725bc7e144cc748f",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-30T10:43:00Z",
+        "end": "2022-06-30T10:43:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_0",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 31,
+        "info_count": 30,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.03225806451612903,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_725bc7e144cc748f",
+          "active_period_id": "58",
+          "analysis_group": "semantic_cluster_0",
+          "event_time": {
+            "start": "2022-06-30T10:43:00Z",
+            "end": "2022-06-30T10:43:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 31,
+            "info": 30,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_57d5bc5c64d4d6ce",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-30T15:37:00Z",
+        "end": "2022-06-30T15:37:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_0",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 35,
+        "info_count": 34,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.02857142857142857,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_57d5bc5c64d4d6ce",
+          "active_period_id": "65",
+          "analysis_group": "semantic_cluster_0",
+          "event_time": {
+            "start": "2022-06-30T15:37:00Z",
+            "end": "2022-06-30T15:37:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 35,
+            "info": 34,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_1ed1ff7f3474aa46",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-06-30T15:37:00Z",
+        "end": "2022-06-30T15:37:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_33",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 4,
+        "info_count": 3,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.25,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_1ed1ff7f3474aa46",
+          "active_period_id": "65",
+          "analysis_group": "semantic_cluster_33",
+          "event_time": {
+            "start": "2022-06-30T15:37:00Z",
+            "end": "2022-06-30T15:37:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 4,
+            "info": 3,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_e50e87522fc13600",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-08T06:14:30Z",
+        "end": "2022-07-08T06:15:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_24",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 3,
+        "info_count": 2,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.3333333333333333,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_e50e87522fc13600",
+          "active_period_id": "82",
+          "analysis_group": "semantic_cluster_24",
+          "event_time": {
+            "start": "2022-07-08T06:14:30Z",
+            "end": "2022-07-08T06:15:00Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 3,
+            "info": 2,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_c459a2e46ce9ef96",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-08T07:56:00Z",
+        "end": "2022-07-08T07:56:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_33",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 2,
+        "info_count": 0,
+        "warn_count": 0,
+        "error_count": 2,
+        "warn_ratio": 0.0,
+        "error_ratio": 1.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_c459a2e46ce9ef96",
+          "active_period_id": "88",
+          "analysis_group": "semantic_cluster_33",
+          "event_time": {
+            "start": "2022-07-08T07:56:00Z",
+            "end": "2022-07-08T07:56:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 2,
+            "info": 0,
+            "warnings": 0,
+            "errors": 2
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_63c2c8b8c727f080",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-08T07:58:00Z",
+        "end": "2022-07-08T07:58:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_0",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 15,
+        "info_count": 14,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.06666666666666667,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_63c2c8b8c727f080",
+          "active_period_id": "88",
+          "analysis_group": "semantic_cluster_0",
+          "event_time": {
+            "start": "2022-07-08T07:58:00Z",
+            "end": "2022-07-08T07:58:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 15,
+            "info": 14,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_846abb5010c3c6ef",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T11:12:30Z",
+        "end": "2022-07-11T11:13:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_3",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 6,
+        "info_count": 4,
+        "warn_count": 0,
+        "error_count": 2,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.3333333333333333,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_846abb5010c3c6ef",
+          "active_period_id": "90",
+          "analysis_group": "semantic_cluster_3",
+          "event_time": {
+            "start": "2022-07-11T11:12:30Z",
+            "end": "2022-07-11T11:13:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 6,
+            "info": 4,
+            "warnings": 0,
+            "errors": 2
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_b22d766a0bde1dd7",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T12:17:30Z",
+        "end": "2022-07-11T12:18:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_24",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 2,
+        "info_count": 0,
+        "warn_count": 2,
+        "error_count": 0,
+        "warn_ratio": 1.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_b22d766a0bde1dd7",
+          "active_period_id": "93",
+          "analysis_group": "semantic_cluster_24",
+          "event_time": {
+            "start": "2022-07-11T12:17:30Z",
+            "end": "2022-07-11T12:18:00Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 2,
+            "info": 0,
+            "warnings": 2,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_42167721bafd0acb",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T12:54:30Z",
+        "end": "2022-07-11T12:55:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_12",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 1.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_42167721bafd0acb",
+          "active_period_id": "94",
+          "analysis_group": "semantic_cluster_12",
+          "event_time": {
+            "start": "2022-07-11T12:54:30Z",
+            "end": "2022-07-11T12:55:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_07010212cc496c1b",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T12:54:30Z",
+        "end": "2022-07-11T12:55:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_34",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 6,
+        "info_count": 5,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.16666666666666666,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_07010212cc496c1b",
+          "active_period_id": "94",
+          "analysis_group": "semantic_cluster_34",
+          "event_time": {
+            "start": "2022-07-11T12:54:30Z",
+            "end": "2022-07-11T12:55:00Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 6,
+            "info": 5,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_c81025f4175ef6dd",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:51:00Z",
+        "end": "2022-07-11T14:51:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_0",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 8,
+        "info_count": 6,
+        "warn_count": 0,
+        "error_count": 2,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.25,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_c81025f4175ef6dd",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_0",
+          "event_time": {
+            "start": "2022-07-11T14:51:00Z",
+            "end": "2022-07-11T14:51:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 8,
+            "info": 6,
+            "warnings": 0,
+            "errors": 2
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_f51f546225965d5d",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:51:00Z",
+        "end": "2022-07-11T14:51:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_33",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 5,
+        "info_count": 3,
+        "warn_count": 0,
+        "error_count": 2,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.4,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_f51f546225965d5d",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_33",
+          "event_time": {
+            "start": "2022-07-11T14:51:00Z",
+            "end": "2022-07-11T14:51:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 5,
+            "info": 3,
+            "warnings": 0,
+            "errors": 2
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_0e047ee66eafdbdd",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:52:00Z",
+        "end": "2022-07-11T14:52:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_34",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 6,
+        "info_count": 5,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.16666666666666666,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_0e047ee66eafdbdd",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_34",
+          "event_time": {
+            "start": "2022-07-11T14:52:00Z",
+            "end": "2022-07-11T14:52:30Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 6,
+            "info": 5,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_892506be114487db",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:55:00Z",
+        "end": "2022-07-11T14:55:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_3",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 3,
+        "info_count": 2,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.3333333333333333,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_892506be114487db",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_3",
+          "event_time": {
+            "start": "2022-07-11T14:55:00Z",
+            "end": "2022-07-11T14:55:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 3,
+            "info": 2,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_36a0fc913ca9f19c",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_0",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 98,
+        "info_count": 98,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": 32.376
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_36a0fc913ca9f19c",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_0",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 98,
+            "info": 98,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_0408639e40abfb64",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_10",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 6,
+        "info_count": 6,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_0408639e40abfb64",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_10",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 6,
+            "info": 6,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_2dcc6e93345bd5ff",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_15",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 4,
+        "info_count": 4,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_2dcc6e93345bd5ff",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_15",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 4,
+            "info": 4,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_2d9ec79fbea96d16",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_17",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 16,
+        "info_count": 16,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_2d9ec79fbea96d16",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_17",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 16,
+            "info": 16,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_7ab1438d0c242193",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_3",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 6,
+        "info_count": 4,
+        "warn_count": 0,
+        "error_count": 2,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.3333333333333333,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_7ab1438d0c242193",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_3",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 6,
+            "info": 4,
+            "warnings": 0,
+            "errors": 2
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_4401f6e23b2acb64",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_34",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 3,
+        "info_count": 3,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_4401f6e23b2acb64",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_34",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 3,
+            "info": 3,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_fc5c09913239ec73",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_36",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 6,
+        "info_count": 6,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_fc5c09913239ec73",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_36",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 6,
+            "info": 6,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_7d4614188d24330c",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_37",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 4,
+        "info_count": 4,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_7d4614188d24330c",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_37",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 4,
+            "info": 4,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_039f0b9b2bc0c307",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_5",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 12,
+        "info_count": 12,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_039f0b9b2bc0c307",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_5",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 12,
+            "info": 12,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_2ac92861513ed318",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T14:59:00Z",
+        "end": "2022-07-11T14:59:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_9",
+        "anomaly_signals": [
+          "volume_spike"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 17,
+        "info_count": 17,
+        "warn_count": 0,
+        "error_count": 0,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_2ac92861513ed318",
+          "active_period_id": "97",
+          "analysis_group": "semantic_cluster_9",
+          "event_time": {
+            "start": "2022-07-11T14:59:00Z",
+            "end": "2022-07-11T14:59:30Z"
+          },
+          "anomaly_signals": [
+            "volume_spike"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 17,
+            "info": 17,
+            "warnings": 0,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_8b441bbbcb20f17c",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T17:26:30Z",
+        "end": "2022-07-11T17:27:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_34",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 6,
+        "info_count": 5,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.16666666666666666,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_8b441bbbcb20f17c",
+          "active_period_id": "103",
+          "analysis_group": "semantic_cluster_34",
+          "event_time": {
+            "start": "2022-07-11T17:26:30Z",
+            "end": "2022-07-11T17:27:00Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 6,
+            "info": 5,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_5516ed4eb1366630",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T17:28:30Z",
+        "end": "2022-07-11T17:29:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_24",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 1.0,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_5516ed4eb1366630",
+          "active_period_id": "103",
+          "analysis_group": "semantic_cluster_24",
+          "event_time": {
+            "start": "2022-07-11T17:28:30Z",
+            "end": "2022-07-11T17:29:00Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_6c295c6afe267809",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-11T17:37:30Z",
+        "end": "2022-07-11T17:38:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_12",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 1.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_6c295c6afe267809",
+          "active_period_id": "103",
+          "analysis_group": "semantic_cluster_12",
+          "event_time": {
+            "start": "2022-07-11T17:37:30Z",
+            "end": "2022-07-11T17:38:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_0fc5ea7650dd589d",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-13T09:41:30Z",
+        "end": "2022-07-13T09:42:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_3",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 20,
+        "info_count": 16,
+        "warn_count": 0,
+        "error_count": 4,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.2,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_0fc5ea7650dd589d",
+          "active_period_id": "115",
+          "analysis_group": "semantic_cluster_3",
+          "event_time": {
+            "start": "2022-07-13T09:41:30Z",
+            "end": "2022-07-13T09:42:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 20,
+            "info": 16,
+            "warnings": 0,
+            "errors": 4
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_78d27f17eab63bba",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-13T09:51:00Z",
+        "end": "2022-07-13T09:51:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_34",
+        "anomaly_signals": [
+          "warn_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 6,
+        "info_count": 5,
+        "warn_count": 1,
+        "error_count": 0,
+        "warn_ratio": 0.16666666666666666,
+        "error_ratio": 0.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_78d27f17eab63bba",
+          "active_period_id": "115",
+          "analysis_group": "semantic_cluster_34",
+          "event_time": {
+            "start": "2022-07-13T09:51:00Z",
+            "end": "2022-07-13T09:51:30Z"
+          },
+          "anomaly_signals": [
+            "warn_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 6,
+            "info": 5,
+            "warnings": 1,
+            "errors": 0
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_ecc3553bf504025b",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-13T11:36:00Z",
+        "end": "2022-07-13T11:36:30Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_3",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 3,
+        "info_count": 2,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.3333333333333333,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_ecc3553bf504025b",
+          "active_period_id": "119",
+          "analysis_group": "semantic_cluster_3",
+          "event_time": {
+            "start": "2022-07-13T11:36:00Z",
+            "end": "2022-07-13T11:36:30Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 3,
+            "info": 2,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_df800886da4b22a0",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-13T11:50:30Z",
+        "end": "2022-07-13T11:51:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_0",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 11,
+        "info_count": 10,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 0.09090909090909091,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_df800886da4b22a0",
+          "active_period_id": "119",
+          "analysis_group": "semantic_cluster_0",
+          "event_time": {
+            "start": "2022-07-13T11:50:30Z",
+            "end": "2022-07-13T11:51:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 11,
+            "info": 10,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    },
+    {
+      "candidate_id": "lic_e58fb3a50467eedc",
+      "signal_source": "logs",
+      "event_time": {
+        "start": "2022-07-13T11:50:30Z",
+        "end": "2022-07-13T11:51:00Z",
+        "duration_seconds": 30.0
+      },
+      "scope": {
+        "level": "entity_local",
+        "entities": [
+          {
+            "role": "application",
+            "service": {
+              "namespace": "train-ticket",
+              "name": "ts-auth-service"
+            }
+          }
+        ]
+      },
+      "correlation": {
+        "scenario_id": "ts-auth-mongo_4.4.15_2022-07-13",
+        "service_keys": [
+          "train-ticket/ts-auth-service"
+        ],
+        "time_tolerance_seconds": 90
+      },
+      "summary": {
+        "analysis_group": "semantic_cluster_33",
+        "anomaly_signals": [
+          "error_novelty"
+        ],
+        "anomaly_bucket_count": 1,
+        "log_count": 1,
+        "info_count": 0,
+        "warn_count": 0,
+        "error_count": 1,
+        "warn_ratio": 0.0,
+        "error_ratio": 1.0,
+        "max_log_count_robust_z": null
+      },
+      "evidence": [
+        {
+          "episode_id": "lep_e58fb3a50467eedc",
+          "active_period_id": "119",
+          "analysis_group": "semantic_cluster_33",
+          "event_time": {
+            "start": "2022-07-13T11:50:30Z",
+            "end": "2022-07-13T11:51:00Z"
+          },
+          "anomaly_signals": [
+            "error_novelty"
+          ],
+          "counts": {
+            "buckets": 1,
+            "logs": 1,
+            "info": 0,
+            "warnings": 0,
+            "errors": 1
+          }
+        }
+      ]
+    }
+  ]
+}
